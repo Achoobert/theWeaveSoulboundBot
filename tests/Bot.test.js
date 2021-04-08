@@ -1,9 +1,11 @@
 // Our main application, the bot
-import MusicBot from '../src/MusicBot'
+import GangBot from '../src/GangBot'
 // Object/Class representing a message from a user
 import Message from '../src/Message'
 // Object/Class representing a chat room.
 import ChatRoom from '../src/ChatRoom'
+
+var fs = require('fs');
 
 // Jest automatic class mocks
 jest.mock('../src/ChatRoom');
@@ -16,8 +18,8 @@ ChatRoom.mockImplementation(() => {
     sendMessage: jest.fn()
   }
 })
-
-describe("MusicBot", () => {
+import gangData from './crimsonGang.js'
+describe("GangBot", () => {
   let bot;
   let chatRoom;
 
@@ -26,13 +28,64 @@ describe("MusicBot", () => {
     // Resets the mocks (clears all calls to functions, etc)
     ChatRoom.mockClear();
 
-    bot = new MusicBot();
+    // // clear file
+    let output = `module.exports={ 
+      name:'Test Daemons',
+      cities:[
+         {name:'Anvilguard',
+         initiates:1,
+         apprentices:1,
+         leader:1,
+         comms:0},
+         {name:'Hammerhall',
+          initiates:1,
+          apprentices:1,
+          leader:1,
+          comms:0}
+      ]
+    };`
+    // fs.writeFile(`./crimsonGang.js`, output, function(err) {
+    //   if (err) {
+    //      console.log(err);
+    //   }
+    // });
+    
+
+    bot = new GangBot(gangData);
     chatRoom = new ChatRoom(); // This will create our mock implementation as an instance
   })
   
   test('!ping message should respond with "pong"', () => {
     const messageContent = '!ping';
     const expectedResponse = 'pong';
+
+    const message = new Message(chatRoom, messageContent);
+    
+    bot.handleMessage(message);
+
+    // Only one message should be sent
+    expect(chatRoom.sendMessage).toBeCalledTimes(1);
+    // The message sent should be 'pong'
+    expect(chatRoom.sendMessage).toBeCalledWith(expectedResponse);
+  })
+
+  test('!data message should respond with some json', () => {
+    const messageContent = '!data';
+    const expectedResponse = { 
+      name:'Test Daemons',
+      cities:[
+         {name:'Anvilguard',
+         initiates:1,
+         apprentices:1,
+         leader:1,
+         comms:0},
+         {name:'Hammerhall',
+          initiates:1,
+          apprentices:1,
+          leader:1,
+          comms:0}
+      ]
+    };
 
     const message = new Message(chatRoom, messageContent);
     
@@ -53,4 +106,18 @@ describe("MusicBot", () => {
    // No messages should be sent
    expect(chatRoom.sendMessage).toBeCalledTimes(0);
 });
+
+  test('Bot should add new city', () => {
+    const messageContent = '!addCity Chiang Mai';
+    const expectedResponse = 'Added Chiang Mai';
+    
+    const message = new Message(chatRoom, messageContent);
+
+    bot.handleMessage(message);
+
+    // Only one message should be sent
+    expect(chatRoom.sendMessage).toBeCalledTimes(1);
+    // The message sent should be 'pong'
+    expect(chatRoom.sendMessage).toBeCalledWith(expectedResponse);
+  });
 })
