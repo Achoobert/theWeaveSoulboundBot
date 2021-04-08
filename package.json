@@ -1,0 +1,22 @@
+{
+  "name": "nodebotdiscord",
+  "version": "1.0.0",
+  "description": "weavebot",
+  "main": "app.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Isaac",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.13.14",
+    "@babel/plugin-transform-runtime": "^7.13.10",
+    "@babel/preset-env": "^7.13.12",
+    "@babel/runtime": "^7.13.10",
+    "@types/jest": "^26.0.22",
+    "jest": "^26.6.3"
+  },
+  "dependencies": {
+    "discord.js": "^12.5.3"
+  }
+}
