@@ -6,15 +6,21 @@ buit using this
  https://github.com/ashindlecker/tdd-discord-music-botzs
 
 ### Commands
-`!play {youtube-url}` Streams a youtube video to a voice channel, or adds song to queue if bot is currently playing something
+`!play {youtube-url}` Streams a youtube video to a voice czshannel, or adds song to queue if bot is currently playing something
 
 `!skip` Skips current song being played and plays the next song
 
 `!ping` Responds with "pong"
 
 help
-oneweek
 newcity
+adds an empty new city. It needs another city to sent it a leader.
+
+oneweek
+generates numbers, IF city has a leader
+autosends new leaders to empty city
+will notify user if there are extra leaders
+
 resetdata
 
 
