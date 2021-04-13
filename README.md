@@ -1,19 +1,36 @@
-# tdd-discord-music-bot
+# The Weave's Soulbound Bot
+## discord-gang-bot
 
-This is a bot built using test driven development.
-goal is to admin my RPG gang, track its growth, and calculate my income
-buit using this
+Based on tdd-discord-music-bot
+
+
+Goal is to admin my RPG gang, track its growth, and calculate my income.
+New cities will be added as empty objects, and as the gang gets big enough in smaller cities, they will send leaders to start a new chapter in a random empty city.
+This is a bot built using test/documentation driven development.
+
+Based on tdd-discord-music-bot
  https://github.com/ashindlecker/tdd-discord-music-botzs
 
 ### Commands
 `!play {youtube-url}` Streams a youtube video to a voice czshannel, or adds song to queue if bot is currently playing something
 
-`!skip` Skips current song being played and plays the next song
+`!newweek` 
+1. for each city rolls numbers to calculate lost/added/upgraded 
+2. For each city, efficiently upgrade. 
+ - for each 20 followers in a city, have a leader (upgrade apprentice)
+ - if there is an empty city, upgrade apprentice and send them 
+ - Upgrade initiates to apprentices
+3. calculate Aqua Gyranis in a given city 
+ - if city has enough money saved up, purchase magic-messaging like
+ - If city has magic messaging line, empty aqua gyranis into gang's pooled bank account
 
 `!ping` Responds with "pong"
 
-help
-newcity
+`!help`
+replies with list of commands
+
+`!newcity </name of new city>`
+ex: `!newcity Chiang Mai`
 adds an empty new city. It needs another city to sent it a leader.
 
 oneweek
