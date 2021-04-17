@@ -1,5 +1,5 @@
-import ChatRoom, {VoiceChannel} from '../ChatRoom'
-import Message from '../Message'
+import ChatRoom, {VoiceChannel} from '../ChatRoom.js'
+import Message from '../Message.js'
 
 export default class DiscordWrapper {
   constructor(bot, discordClient, key){

@@ -14,7 +14,7 @@ Based on tdd-discord-music-bot
 ### Commands
 `!play {youtube-url}` Streams a youtube video to a voice czshannel, or adds song to queue if bot is currently playing something
 
-`!newweek` 
+`!oneweek` 
 1. for each city rolls numbers to calculate lost/added/upgraded 
 2. For each city, efficiently upgrade. 
  - for each 20 followers in a city, have a leader (upgrade apprentice)
@@ -33,12 +33,19 @@ replies with list of commands
 ex: `!newcity Chiang Mai`
 adds an empty new city. It needs another city to sent it a leader.
 
-oneweek
-generates numbers, IF city has a leader
-autosends new leaders to empty city
-will notify user if there are extra leaders
+`!cat </gang name>`
+ex. `!cat Crimson Daemons`
+Lists basic city information
+
+`!cat cities`
+Lists basic city information
+
+`!cat cities -v`
+Lists full city information
 
 resetdata
+
+
 
 
 ## Project Structure and TDD
