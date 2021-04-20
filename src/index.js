@@ -3,10 +3,12 @@ import DiscordWrapper from './Integrations/DiscordWrapper.js';
 import Discord from 'discord.js';
 import Config from '../config.json';
 
-var gangData = ('./crimsonGang.js');
+import gangData from './crimsonGang.js';
+console.log(gangData)
 // Our main application, the bot
 import GangBot from '../src/GangBot.js';
 const gangBot = new GangBot(gangData);
+console.log(Config.key)
 const discordBot = new DiscordWrapper(gangBot, new Discord.Client(), Config.key);
 discordBot.start()
 // TODO implement this

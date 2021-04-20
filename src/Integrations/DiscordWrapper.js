@@ -22,7 +22,9 @@ export default class DiscordWrapper {
   _messageFactory(discordMessage) {
 
     const sendMessage = (messageContent) => {
-      discordMessage.channel.sendMessage(messageContent);
+      console.log(discordMessage.channel.sendMessage)
+      // this.discordClient.sendMessage
+      discordMessage.channel.send(messageContent);
     };
 
     const joinVoiceChannel = async() => {

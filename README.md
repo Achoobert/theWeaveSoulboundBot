@@ -12,8 +12,6 @@ Based on tdd-discord-music-bot
  https://github.com/ashindlecker/tdd-discord-music-botzs
 
 ### Commands
-`!play {youtube-url}` Streams a youtube video to a voice czshannel, or adds song to queue if bot is currently playing something
-
 `!oneweek` 
 1. for each city rolls numbers to calculate lost/added/upgraded 
 2. For each city, efficiently upgrade. 
