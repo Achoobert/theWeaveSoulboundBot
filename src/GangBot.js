@@ -123,7 +123,7 @@ export default class GangBot {
       }
    
       if(content === '!data'){
-        chatRoom.sendMessage(this.gangData);
+        chatRoom.sendMessage(JSON.stringify(this.gangData));
       }
    
       if(content.slice(0,9) === '!addCity '){

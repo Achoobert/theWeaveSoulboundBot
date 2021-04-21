@@ -120,28 +120,28 @@ describe("GangBot", () => {
     expect(chatRoom.sendMessage).toBeCalledWith(expectedResponse);
   })
 
-  test('!data message should respond with some json', () => {
+  test('!data message should respond with stringify json', () => {
     const messageContent = '!data';
-    const expectedResponse = { 
+    const expectedResponse = JSON.stringify({ 
       name:'Test Daemons',
       budget:100,
       cities:[
          {name:'Anvilguard',
-         initiates:1,
-         apprentices:1,
-         leader:1,
-         comms:0,
-         localBalance:0,
-         upgrades:0},
+            initiates:1,
+            apprentices:1,
+            leader:1,
+            upgrades:0,
+            localBalance:0,
+            comms:0},
          {name:'Hammerhall',
-          initiates:1,
-          apprentices:1,
-          leader:1,
-          comms:0,
-          localBalance:0,
-          upgrades:0}
+            initiates:1,
+            apprentices:1,
+            leader:1,
+            upgrades:0,
+            localBalance:0,
+            comms:0}
       ]
-    };
+   });
 
     const message = new Message(chatRoom, messageContent);
     
@@ -290,6 +290,46 @@ describe("GangBot", () => {
     expect(chatRoom.sendMessage).toBeCalledTimes(1);
     // The message sent should be ''
     expect(chatRoom.sendMessage).toBeCalledWith(expectedResponse);
+  });
+  
+  
+  test('should write a new file', () => {
+    // clear old
+    fs.writeFileSync('./testWrite.js','')
+    // test data
+    const protoGang = { 
+      name:'Test',
+      budget:1,
+      cities:[
+         {name:'A',
+            initiates:1,
+            apprentices:1,
+            leader:1,
+            upgrades:0,
+            localBalance:0,
+            comms:0},
+         {name:'B',
+            initiates:1,
+            apprentices:1,
+            leader:1,
+            upgrades:0,
+            localBalance:0,
+            comms:0}
+      ]
+   }
+    var result = bot.saveData(protoGang, './testWrite.js');
+    // should be in range
+    import testWroteGang from './testWrite'
+    expect(testWroteGang).toEqual(protoGang);
+  });
+  
+  test('', () => {
+    // 
+  });
+
+  test('', () => {
+    // 
+
   });
   
   /*

@@ -5,7 +5,7 @@
   "main": "./index.js",
   "type": "module",
   "scripts": {
-    "test": "jest -- watchAll",
+    "test": "jest",
     "start": "node --experimental-modules src/index.js"
   },
   "author": "Isaac",

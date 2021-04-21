@@ -3,6 +3,11 @@ import DiscordWrapper from './Integrations/DiscordWrapper.js';
 import Discord from 'discord.js';
 import Config from '../config.json';
 
+// If I use relepit
+if(Config.key==undefined){
+   Config.key = process.env.TOKEN;
+}
+
 import gangData from './crimsonGang.js';
 console.log(gangData)
 // Our main application, the bot
