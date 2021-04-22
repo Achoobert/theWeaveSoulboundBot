@@ -18,7 +18,7 @@ ChatRoom.mockImplementation(() => {
     sendMessage: jest.fn()
   }
 })
-import gangData from './testGang.js'
+var gangDatapath = `./testGang.json`
 describe("GangBot", () => {
   let bot;
   let chatRoom;
@@ -28,81 +28,36 @@ describe("GangBot", () => {
     // Resets the mocks (clears all calls to functions, etc)
     ChatRoom.mockClear();
 
-    // // clear file
-    let readyToSpread = { 
+    // clear file
+    let staticGangVersion = { 
       name:'Test Daemons',
       budget:100,
       cities:[
          {name:'Anvilguard',
-         initiates:12,
-         apprentices:12,
-         leader:1,
-         comms:0},
+            initiates:1,
+            apprentices:1,
+            leader:1,
+            upgrades:0,
+            localBalance:0,
+            comms:0},
          {name:'Hammerhall',
-          initiates:12,
-          apprentices:12,
-          leader:1,
-          comms:0},
-         {name:'World Club',
-          initiates:0,
-          apprentices:0,
-          leader:0,
-          comms:0}
+            initiates:1,
+            apprentices:1,
+            leader:1,
+            upgrades:0,
+            localBalance:0,
+            comms:0}
       ]
     };
-    let notifyUser = { 
-      name:'Test Daemons',
-      cities:[
-         {name:'Anvilguard',
-         initiates:12,
-         apprentices:12,
-         leader:1,
-         comms:0},
-         {name:'Hammerhall',
-          initiates:12,
-          apprentices:1,
-          leader:1,
-          comms:0}
-      ]
-    };
-    let moveLeader = { 
-      name:'Test Daemons',
-      cities:[
-         {name:'Anvilguard',
-         initiates:7,
-         apprentices:4,
-         leader:1,
-         comms:0},
-         {name:'Hammerhall',
-          initiates:50,
-          apprentices:0,
-          leader:1,
-          comms:0}
-      ]
-    };
-    let noLeaders = { 
-      name:'Test Daemons',
-      cities:[
-         {name:'Anvilguard',
-         initiates:0,
-         apprentices:0,
-         leader:0,
-         comms:0},
-         {name:'Hammerhall',
-          initiates:0,
-          apprentices:0,
-          leader:0,
-          comms:0}
-      ]
-    };
-    // fs.writeFile(`./crimsonGang.js`, output, function(err) {
-    //   if (err) {
-    //      console.log(err);
-    //   }
-    // });
+
+    fs.writeFileSync(`./testGang.json`, JSON.stringify(staticGangVersion), function(err) {
+      if (err) {
+          console.log(err);
+      }
+    });
     
 
-    bot = new GangBot(gangData);
+    bot = new GangBot(gangDatapath);
     chatRoom = new ChatRoom(); // This will create our mock implementation as an instance
   })
   
@@ -119,6 +74,38 @@ describe("GangBot", () => {
     // The message sent should be 'pong'
     expect(chatRoom.sendMessage).toBeCalledWith(expectedResponse);
   })
+
+  test('import test, should respond with json', () => {
+    let testPath = './testGang.json'
+    let testData =  { 
+      name:'Test Daemons',
+      budget:100,
+      cities:[
+         {name:'Anvilguard',
+            initiates:1,
+            apprentices:1,
+            leader:1,
+            upgrades:0,
+            localBalance:0,
+            comms:0},
+         {name:'Hammerhall',
+            initiates:1,
+            apprentices:1,
+            leader:1,
+            upgrades:0,
+            localBalance:0,
+            comms:0}
+      ]
+    };
+    // should be same as test data
+    expect(bot.getGangData(testPath)).toEqual(testData);
+  });
+
+  test('import test, should behave like object', () => {
+    bot.gangData.cities.push({name:"Chiang Mai"})
+    // should be same as string test data
+    expect(bot.gangData.cities).toContainEqual({name:"Chiang Mai"});
+  });
 
   test('!data message should respond with stringify json', () => {
     const messageContent = '!data';
@@ -149,7 +136,7 @@ describe("GangBot", () => {
 
     // Only one message should be sent
     expect(chatRoom.sendMessage).toBeCalledTimes(1);
-    // The message sent should be 'pong'
+    // The message sent should be '{ name:'Test Daemons',budget:100,cities:[{name:'Anvilguard',initiates:1,apprentices:1,leader:1,upgrades:0,localBalance:0,comms:0},{name:'Hammerhall',initiates:1,apprentices:1,leader:1,upgrades:0,localBalance:0,comms:0}]}
     expect(chatRoom.sendMessage).toBeCalledWith(expectedResponse);
   })
 
@@ -179,6 +166,17 @@ describe("GangBot", () => {
   
   test('Bot should have new city', () => {
     // Make sure it was actually added
+    bot.gangData.cities.push(
+      {
+        name:'Chiang Mai',
+        initiates:0,
+        apprentices:0,
+        leader:0,
+        comms:0,
+        localBalance:0,
+        upgrades:0,
+        inTransit:true
+      })
     const messageContent = '!listCities';
     const expectedResponse = 'Anvilguard, Hammerhall, Chiang Mai, ';
     
@@ -193,12 +191,34 @@ describe("GangBot", () => {
   });
 
   test('Bot should have empty city', () => {
+    bot.gangData.cities.push(
+      {
+        name:'Chiang Mai',
+        initiates:0,
+        apprentices:0,
+        leader:0,
+        comms:0,
+        localBalance:0,
+        upgrades:0,
+        inTransit:true
+      })
     let iWantTrue = true;
     // The message sent should be 'true'
     expect(bot.isEmptyCity()).toBe(iWantTrue);
   });
   
   test('Bot should be able to addToEmptyCity', () => {
+    bot.gangData.cities.push(
+      {
+        name:'Chiang Mai',
+        initiates:0,
+        apprentices:0,
+        leader:0,
+        comms:0,
+        localBalance:0,
+        upgrades:0,
+        inTransit:true
+      })
     let iWant = {name:'Chiang Mai',
                   initiates:0,
                   apprentices:0,
@@ -280,7 +300,7 @@ describe("GangBot", () => {
   test('!cat Crimson Daemons should return overall data', () => {
     // 
     const messageContent = '!cat';
-    const expectedResponse = gangData;
+    const expectedResponse = bot.gangData;
     
     const message = new Message(chatRoom, messageContent);
 
@@ -295,7 +315,7 @@ describe("GangBot", () => {
   
   test('should write a new file', () => {
     // clear old
-    fs.writeFileSync('./testWrite.js','')
+    fs.writeFileSync('./testWrite.json','')
     // test data
     const protoGang = { 
       name:'Test',
@@ -316,20 +336,70 @@ describe("GangBot", () => {
             localBalance:0,
             comms:0}
       ]
-   }
-    var result = bot.saveData(protoGang, './testWrite.js');
+    }
+    bot.saveData(protoGang, './testWrite.json');
     // should be in range
-    import testWroteGang from './testWrite'
-    expect(testWroteGang).toEqual(protoGang);
+    let testWroteGang = fs.readFileSync('./testWrite.json', 'utf8', (err, jsonString) => {
+      if (err) {
+          console.log("File read failed:", err)
+          return
+      }
+      console.log('File data:', jsonString) 
+      return jsonString;
+     });
+    expect(JSON.parse(testWroteGang)).toEqual(protoGang);
   });
   
-  test('', () => {
-    // 
+  test('!report message should respond with string', () => {
+    const messageContent = '!report';
+    // const expectedResponse = bot.gangData;
+    
+    const message = new Message(chatRoom, messageContent);
+
+    bot.handleMessage(message);
+
+    // Only one message should be sent
+    expect(chatRoom.sendMessage).toBeCalledTimes(1);
+    // The message sent should be ''
+    expect(chatRoom.sendMessage).toBeDefined();
   });
 
-  test('', () => {
+  test('local balance', () => {
     // 
-
+    json = {name:'A',
+            initiates:1,
+            apprentices:1,
+            leader:1,
+            upgrades:0,
+            localBalance:0,
+            comms:0}
+    outJson = {name:'A',
+            initiates:1,
+            apprentices:1,
+            leader:1,
+            upgrades:0,
+            localBalance:15,
+            comms:0}
+    expect(bot.calculateIncome(json)).toEqual(outJson)
+  });
+  
+  test('has comms', () => {
+    // 
+    json = {name:'A',
+            initiates:1,
+            apprentices:1,
+            leader:1,
+            upgrades:0,
+            localBalance:0,
+            comms:1}
+    outJson = {name:'A',
+            initiates:1,
+            apprentices:1,
+            leader:1,
+            upgrades:0,
+            localBalance:0,
+            comms:1}
+    expect(bot.calculateIncome(json)).toEqual(outJson)
   });
   
   /*

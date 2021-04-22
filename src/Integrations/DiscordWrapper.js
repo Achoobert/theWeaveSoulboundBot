@@ -23,7 +23,7 @@ export default class DiscordWrapper {
 
     const sendMessage = (messageContent) => {
       console.log({'sending': messageContent})
-      if(messageContent!=undefined){
+      if(messageContent!=undefined && messageContent!=null){
         discordMessage.channel.send(messageContent);
       }
     };

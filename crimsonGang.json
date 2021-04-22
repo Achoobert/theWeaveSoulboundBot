@@ -1,0 +1,24 @@
+{
+   "name": "Crimson Daemons",
+   "budget": 100,
+   "cities": [
+      {
+         "name": "Anvilguard",
+         "initiates": 26,
+         "apprentices": 17,
+         "leader": 2,
+         "upgrades": 0,
+         "localBalance": 0,
+         "comms": 0
+      },
+      {
+         "name": "Hammerhall",
+         "initiates": 22,
+         "apprentices": 14,
+         "leader": 2,
+         "upgrades": 0,
+         "localBalance": 0,
+         "comms": 0
+      }
+   ]
+}

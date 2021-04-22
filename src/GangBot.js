@@ -11,13 +11,34 @@
 //      {Hammerhall,}
 //   ]
 // }
-
+import fs from 'fs';
+import path from 'path';
 
 export default class GangBot {
-   constructor(gangData) {
-    this.gangData = gangData
+   constructor(gangDatapath) {
+    // read the file
+    this.path = gangDatapath;
+    this.gangData = this.getGangData(gangDatapath)
+    //
    }
    // Getters
+   getGangData(path){
+    let jsonData = fs.readFileSync(path, "utf8", (err, jsonString) => {
+              if (err) {
+                  console.log("File read failed:", err)
+                  return 'error'
+              }
+              console.log('File data:', jsonString) 
+              //return jsonString;
+              return (jsonString);
+            });
+      if(jsonData!=undefined && jsonData!='' && jsonData!=[]){
+        return JSON.parse(jsonData)
+      }else{
+        return(jsonData)
+      }
+   }
+   // Checkes if there is any empty cities returns bool 
    isEmptyCity(){
      // 
      var foundLeaderless = false
@@ -41,7 +62,7 @@ export default class GangBot {
           this.gangData.budget -= 200
           leaderDice = 12
           while (leaderDice >0) {
-            if(Math.random(1,6)>=4){
+            if(this.getRandomInt(6)>=4){
               city.initiates +=1
             }
             leaderDice--
@@ -52,8 +73,15 @@ export default class GangBot {
     });
     return updatedCity
   }
-
+  saveData(latestGangData, destinationPath){
+    fs.writeFileSync(destinationPath, JSON.stringify(latestGangData), (err) => {
+      if (err) console.log('Error writing file:', err)
+    })
+  }
    // Method
+  getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
    // parent method for new week
    // iterates each city, TODO iterates gangs
    newWeek(){
@@ -67,20 +95,48 @@ export default class GangBot {
        }
        // 
        city = this.spendUpgrades(city)
+       //
+       city = this.calculateIncome(city)
       });
+
+      this.saveData(this.gangData, this.path)
       return outcome;
    }
    // Safe upgrade roll
    safeRoll(city){
-     city.initiates += (1 + Math.random(1,6))
+     city.initiates += (1 + this.getRandomInt(6))
      return city
    }
    // rolls dice for each city
    roll(city){
-     city.initiates -= Math.random(1,6)
-     city.initiates += (1 + Math.random(1,6))
-     city.upgrades = Math.random(1,3)
+     city.initiates -= this.getRandomInt(6)
+     city.initiates += (1 + this.getRandomInt(6))
+     city.upgrades = this.getRandomInt(3)
      return city
+   }
+   // rolls dice for each city
+   roll(city){
+     var income = (city.apprentices * 15)
+      if(city.comms){//truthy
+        this.gangData.budget += income 
+      }else if((income+city.localBalance)>50){
+        this.gangData.budget += (income + city.localBalance - 50)
+        city.comms = 1
+      }else{
+        city.localBalance += (income)
+      }
+     return city
+   }
+   // rolls dice for each city
+   smallReport(){
+     var report = '';
+     report = report.concat(JSON.stringify(this.gangData.name))
+     report = report.concat(' budget is ', JSON.stringify(this.gangData.budget))
+     this.gangData.cities.forEach(city => {
+       report = report.concat(', ', JSON.stringify(city.name))
+       report = report.concat(' is level ',JSON.stringify(city.leader))
+     });
+     return report
    }
    // calculates who upgrades
    spendUpgrades(city){
@@ -143,14 +199,50 @@ export default class GangBot {
           })
 
           newName = this.gangData.cities[2].name
-
+  
+        this.saveData(this.gangData, this.path)
         chatRoom.sendMessage(`Added ${newName}`);
+      }
+
+      if(content.slice(0,9) === '!addGang '){
+        var newName = content.slice(9, content.length)
+
+        // this.gangData.gangs.push(
+        //   {
+        //     name:newName,
+        //     initiates:0,
+        //     apprentices:0,
+        //     leader:0,
+        //     comms:0,
+        //     localBalance:0,
+        //     upgrades:0,
+        //     inTransit:true
+        //   })
+
+        // newName = this.gangData.cities[2].name
+  
+        this.saveData(this.gangData, this.path)
+        //chatRoom.sendMessage(`Added ${newName}`);
+        chatRoom.sendMessage(`Sorry, this feature is not impleminted yet.`);
+      }
+    
+      if(content.slice(0,9) === '!withdraw '){
+        var number = parseInt(content.slice(10, content.length))
+        console.log(number)
+  
+        this.saveData(this.gangData, this.path)
+        //chatRoom.sendMessage(`Added ${newName}`);
+        chatRoom.sendMessage(`Sorry, this feature is not impleminted yet.`);
       }
     
       if(content === '!newWeek'){
         response = this.newWeek()
 
         chatRoom.sendMessage(response);
+      }
+ 
+      if(content === '!report'){
+        chatRoom.sendMessage(this.smallReport());
       }
 
       if(content === '!cat'){

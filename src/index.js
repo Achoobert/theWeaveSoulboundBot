@@ -8,11 +8,10 @@ if(Config.key==undefined){
    Config.key = process.env.TOKEN;
 }
 
-import gangData from './crimsonGang.js';
-console.log(gangData)
+var gangDatapath = './crimsonGang.json';
 // Our main application, the bot
 import GangBot from '../src/GangBot.js';
-const gangBot = new GangBot(gangData);
+const gangBot = new GangBot(gangDatapath);
 console.log(Config.key)
 const discordBot = new DiscordWrapper(gangBot, new Discord.Client(), Config.key);
 discordBot.start()
