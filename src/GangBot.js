@@ -115,7 +115,7 @@ export default class GangBot {
      return city
    }
    // rolls dice for each city
-   roll(city){
+   calculateIncome(city){
      var income = (city.apprentices * 15)
       if(city.comms){//truthy
         this.gangData.budget += income 
