@@ -245,10 +245,11 @@ describe("GangBot", () => {
     var result = bot.roll(protoCity);
 
     // should be in range
-    expect((result.initiates >= 1) && (result.initiates <= 12)).toBe(true);
-    expect(result.apprentices == 1).toBe(true);
-    expect(result.leader == 1).toBe(true);
-    expect(result.upgrades > 0 && result.upgrades < 4).toBe(true);
+    expect((result.initiates >= 1) && (result.initiates <= 12)).toBeTruthy();
+    expect(result.apprentices == 1).toBeTruthy();
+    expect(result.leader == 1).toBeTruthy();
+    expect(result.upgrades >= 1).toBeTruthy();
+    expect(result.upgrades <= 3).toBeTruthy();
   });
    test('Bot should upgrade', () => {
     const protoCity = {
@@ -366,14 +367,14 @@ describe("GangBot", () => {
 
   test('local balance', () => {
     // 
-    json = {name:'A',
+    let json = {name:'A',
             initiates:1,
             apprentices:1,
             leader:1,
             upgrades:0,
             localBalance:0,
             comms:0}
-    outJson = {name:'A',
+    let outJson = {name:'A',
             initiates:1,
             apprentices:1,
             leader:1,
@@ -385,14 +386,14 @@ describe("GangBot", () => {
   
   test('has comms', () => {
     // 
-    json = {name:'A',
+    let json = {name:'A',
             initiates:1,
             apprentices:1,
             leader:1,
             upgrades:0,
             localBalance:0,
             comms:1}
-    outJson = {name:'A',
+    let outJson = {name:'A',
             initiates:1,
             apprentices:1,
             leader:1,

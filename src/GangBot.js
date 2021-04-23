@@ -54,19 +54,24 @@ export default class GangBot {
     // 
     var updatedCity = false
     this.gangData.cities.forEach(city => {
-      if(city.leader == 0){
-        city.leader = sentLeader
+      var report = 'r'
+      if(city.leader == 0 && sentLeader>=1){
+        city.leader += 1
+        sentLeader -= 1
+        report =  `adding leader from ${sender.name} to ${city.name}`
         city.inTransit = true
         // if comms and budget, add recruit endeavor
         if(sender.comms && this.gangData.budget>200){
+          report = `adding leader from ${sender.name} to ${city.name} and starting city with bonus initiates recruitment`
           this.gangData.budget -= 200
-          leaderDice = 12
+          let leaderDice = 12
           while (leaderDice >0) {
             if(this.getRandomInt(6)>=4){
               city.initiates +=1
             }
             leaderDice--
           }
+          this.chatRoom.sendMessage(report);
         }
         updatedCity = city
       }
@@ -117,9 +122,10 @@ export default class GangBot {
    // rolls dice for each city
    calculateIncome(city){
      var income = (city.apprentices * 15)
+     console.log(income)
       if(city.comms){//truthy
         this.gangData.budget += income 
-      }else if((income+city.localBalance)>50){
+      }else if((income+city.localBalance)>=50){
         this.gangData.budget += (income + city.localBalance - 50)
         city.comms = 1
       }else{
@@ -127,14 +133,35 @@ export default class GangBot {
       }
      return city
    }
-   // rolls dice for each city
+   // report
    smallReport(){
      var report = '';
-     report = report.concat(JSON.stringify(this.gangData.name))
-     report = report.concat(' budget is ', JSON.stringify(this.gangData.budget))
+     report = report.concat(String(this.gangData.name),' ')
+     report = report.concat('budget is ', JSON.stringify(this.gangData.budget), '\n')
      this.gangData.cities.forEach(city => {
-       report = report.concat(', ', JSON.stringify(city.name))
-       report = report.concat(' is level ',JSON.stringify(city.leader))
+       if(city.leader != 0){
+         report = report.concat(String(city.name), ' ')
+         report = report.concat('is level ',JSON.stringify(city.leader), ',\n')
+       }
+     });
+     return report
+   }
+   // report
+   mediumReport(){
+     var report = '';
+     report = report.concat(String(this.gangData.name),' ')
+     report = report.concat('budget is ', JSON.stringify(this.gangData.budget), '\n')
+     this.gangData.cities.forEach(city => {
+       if(city.leader != 0){
+         report = report.concat(String(city.name), ' ')
+         report = report.concat('is level ',JSON.stringify(city.leader), ',\n')
+         report = report.concat('\t Initiates ',JSON.stringify(city.initiates), ',\n')
+         report = report.concat('\t Apprentices ',JSON.stringify(city.apprentices), ',\n')
+         report = report.concat('\t Leaders ',JSON.stringify(city.leader), ',\n')
+         if(city.comms==0 && city.localBalance>14){
+          report = report.concat('\tlocal Balance ',JSON.stringify(city.localBalance), ',\n')
+         }
+       }
      });
      return report
    }
@@ -145,6 +172,7 @@ export default class GangBot {
       city.upgrades -= 1
       city.apprentices -= 1
       city.leader += 1   
+      this.chatRoom.sendMessage(`Adding new leader to ${city.name}`);
     } 
 
     // if another city needs a leader
@@ -152,13 +180,15 @@ export default class GangBot {
       // add leader to other city
       city.upgrades -= 1
       city.apprentices -= 1
-      addToEmptyCity(1)
+      this.addToEmptyCity(1,city)
+      
     }
     // else 
     if (city.initiates>city.upgrades){
       city.apprentices += city.upgrades
       city.initiates -= city.upgrades
       city.upgrades = 0
+      // this.chatRoom.sendMessage(`Adding new apprentices to ${city.name}`);
     }
 
     return city
@@ -166,6 +196,7 @@ export default class GangBot {
  
    handleMessage(message) {
       const { chatRoom, content } = message;
+      this.chatRoom = message.chatRoom;
       if(content === '!ping'){
         chatRoom.sendMessage('pong');
       }
@@ -226,7 +257,8 @@ export default class GangBot {
         chatRoom.sendMessage(`Sorry, this feature is not impleminted yet.`);
       }
     
-      if(content.slice(0,9) === '!withdraw '){
+      if(content.slice(0,8) === '!withdraw '){
+        // todo 
         var number = parseInt(content.slice(10, content.length))
         console.log(number)
   
@@ -238,11 +270,16 @@ export default class GangBot {
       if(content === '!newWeek'){
         response = this.newWeek()
 
-        chatRoom.sendMessage(response);
+        chatRoom.sendMessage("Here is the updated data");
+        chatRoom.sendMessage(this.mediumReport());
       }
  
       if(content === '!report'){
         chatRoom.sendMessage(this.smallReport());
+      }
+
+      if(content === '!full report'){
+        chatRoom.sendMessage(this.mediumReport());
       }
 
       if(content === '!cat'){
@@ -252,5 +289,12 @@ export default class GangBot {
         // TODO
         chatRoom.sendMessage(this.gangData);
       }
+      // if(content === 'Hello Weavebot'){
+        
+      //   //var searchName = content.slice(5, content.length)
+      //   //where 
+      //   // TODO
+      //   chatRoom.sendMessage("Hello master. How can I serve you today? Dinner... or a bath?");
+      // }
     }
  }
