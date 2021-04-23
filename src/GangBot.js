@@ -71,7 +71,9 @@ export default class GangBot {
             }
             leaderDice--
           }
-          this.chatRoom.sendMessage(report);
+          if (this.chatRoom){
+            this.chatRoom.sendMessage(report);
+          }
         }
         updatedCity = city
       }
@@ -117,6 +119,9 @@ export default class GangBot {
      city.initiates -= this.getRandomInt(6)
      city.initiates += (1 + this.getRandomInt(6))
      city.upgrades = this.getRandomInt(3)
+     if (city.upgrades > 3){
+       throw error
+     }
      return city
    }
    // rolls dice for each city
@@ -172,7 +177,9 @@ export default class GangBot {
       city.upgrades -= 1
       city.apprentices -= 1
       city.leader += 1   
-      this.chatRoom.sendMessage(`Adding new leader to ${city.name}`);
+      if (this.chatRoom){
+        this.chatRoom.sendMessage(`Adding new leader to ${city.name}`);
+      }
     } 
 
     // if another city needs a leader
@@ -268,10 +275,9 @@ export default class GangBot {
       }
     
       if(content === '!newWeek'){
-        response = this.newWeek()
-
-        chatRoom.sendMessage("Here is the updated data");
-        chatRoom.sendMessage(this.mediumReport());
+        this.newWeek()
+        let response = ("Here is the updated data\n").concat(this.smallReport())
+        chatRoom.sendMessage(response);
       }
  
       if(content === '!report'){
@@ -294,7 +300,7 @@ export default class GangBot {
       //   //var searchName = content.slice(5, content.length)
       //   //where 
       //   // TODO
-      //   chatRoom.sendMessage("Hello master. How can I serve you today? Dinner... or a bath?");
+      //   chatRoom.sendMessage("Hello master. How can I serve you today?");
       // }
     }
  }
