@@ -177,7 +177,7 @@ describe("GangBot", () => {
         upgrades:0,
         inTransit:true
       })
-    const messageContent = '!listCities';
+    const messageContent = '!list cities';
     const expectedResponse = 'Anvilguard, Hammerhall, Chiang Mai, ';
     
     const message = new Message(chatRoom, messageContent);
@@ -245,11 +245,12 @@ describe("GangBot", () => {
     var result = bot.roll(protoCity);
 
     // should be in range
-    expect((result.initiates >= 1) && (result.initiates <= 12)).toBeTruthy();
+    expect(result.initiates).toBeLessThan(13);
+    expect(result.initiates).toBeGreaterThan(0);
     expect(result.apprentices == 1).toBeTruthy();
     expect(result.leader == 1).toBeTruthy();
-    expect(result.upgrades >= 1).toBeTruthy();
-    expect(result.upgrades <= 3).toBeTruthy();
+    expect(result.upgrades).toBeGreaterThanOrEqual(1);
+    expect(result.upgrades).toBeLessThanOrEqual(3);
   });
    test('Bot should upgrade', () => {
     const protoCity = {
@@ -351,8 +352,22 @@ describe("GangBot", () => {
     expect(JSON.parse(testWroteGang)).toEqual(protoGang);
   });
   
-  test('!report message should respond with string', () => {
+  test('!report message should respond', () => {
     const messageContent = '!report';
+    // const expectedResponse = bot.gangData;
+    
+    const message = new Message(chatRoom, messageContent);
+
+    bot.handleMessage(message);
+
+    // Only one message should be sent
+    expect(chatRoom.sendMessage).toBeCalledTimes(1);
+    // The message sent should be ''
+    expect(chatRoom.sendMessage).toBeDefined();
+  });
+
+  test('!help message should respond', () => {
+    const messageContent = '!help';
     // const expectedResponse = bot.gangData;
     
     const message = new Message(chatRoom, messageContent);
@@ -403,11 +418,21 @@ describe("GangBot", () => {
     expect(bot.calculateIncome(json)).toEqual(outJson)
   });
   
-  /*
-  test('!cat cities- should return overall cities with tier of', () => {
+  test('get Random Int should be in range', () => {
     // 
+    function testRange(max){
+      for (let index = 0; index < 20; index++) {
+        let int =  bot.getRandomInt(max) 
+        expect(int).toBeGreaterThanOrEqual(1)
+        expect(int).toBeLessThanOrEqual(max)
+      };
+    };
+
+    testRange(3)
+    testRange(6)
   });
   
+  /*
   test('!cat cities -v - should return all the data', () => {
     // 
   });

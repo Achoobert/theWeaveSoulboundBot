@@ -1,3 +1,4 @@
+import { DH_UNABLE_TO_CHECK_GENERATOR } from 'constants';
 // { 
 //   name:'Test Daemons',
 //   cities:[
@@ -87,7 +88,14 @@ export default class GangBot {
   }
    // Method
   getRandomInt(max) {
-    return Math.floor(Math.random() * max);
+    function getInt(max){
+      var int = Math.floor(Math.random() * max)
+      if ((int >= (max+1) || int <= 0)){
+        return getInt(max)
+      }
+      return int
+    }
+    return getInt(max)
   }
    // parent method for new week
    // iterates each city, TODO iterates gangs
@@ -119,9 +127,6 @@ export default class GangBot {
      city.initiates -= this.getRandomInt(6)
      city.initiates += (1 + this.getRandomInt(6))
      city.upgrades = this.getRandomInt(3)
-     if (city.upgrades > 3){
-       throw error
-     }
      return city
    }
    // rolls dice for each city
@@ -153,27 +158,45 @@ export default class GangBot {
    }
    // report
    mediumReport(){
-     var report = '';
-     report = report.concat(String(this.gangData.name),' ')
-     report = report.concat('budget is ', JSON.stringify(this.gangData.budget), '\n')
-     this.gangData.cities.forEach(city => {
-       if(city.leader != 0){
-         report = report.concat(String(city.name), ' ')
-         report = report.concat('is level ',JSON.stringify(city.leader), ',\n')
-         report = report.concat('\t Initiates ',JSON.stringify(city.initiates), ',\n')
-         report = report.concat('\t Apprentices ',JSON.stringify(city.apprentices), ',\n')
-         report = report.concat('\t Leaders ',JSON.stringify(city.leader), ',\n')
-         if(city.comms==0 && city.localBalance>14){
-          report = report.concat('\tlocal Balance ',JSON.stringify(city.localBalance), ',\n')
-         }
-       }
-     });
-     return report
-   }
+    var report = '';
+    report = report.concat(String(this.gangData.name),' ')
+    report = report.concat('budget is ', JSON.stringify(this.gangData.budget), '\n')
+    this.gangData.cities.forEach(city => {
+      if(city.leader != 0){
+        report = report.concat(String(city.name), ' ')
+        report = report.concat('is level ',JSON.stringify(city.leader), ',\n')
+        report = report.concat('\t Initiates ',JSON.stringify(city.initiates), ',\n')
+        report = report.concat('\t Apprentices ',JSON.stringify(city.apprentices), ',\n')
+        report = report.concat('\t Leaders ',JSON.stringify(city.leader), ',\n')
+        if(city.comms==0 && city.localBalance>14){
+         report = report.concat('\tlocal Balance ',JSON.stringify(city.localBalance), ',\n')
+        }
+      }
+    });
+    return report
+  }// report
+  fullReport(){
+    var report = '';
+    report = report.concat(String(this.gangData.name),' ')
+    report = report.concat('budget is ', JSON.stringify(this.gangData.budget), '\n')
+    this.gangData.cities.forEach(city => {
+      if(city.leader != 0){
+        report = report.concat(String(city.name), ' ')
+        report = report.concat('is level ',JSON.stringify(city.leader), ',\n')
+        report = report.concat('\t Initiates ',JSON.stringify(city.initiates), ',\n')
+        report = report.concat('\t Apprentices ',JSON.stringify(city.apprentices), ',\n')
+        report = report.concat('\t Leaders ',JSON.stringify(city.leader), ',\n')
+        if(city.comms==0 && city.localBalance>14){
+         report = report.concat('\tlocal Balance ',JSON.stringify(city.localBalance), ',\n')
+        }
+      }
+    });
+    return report
+  }
    // calculates who upgrades
    spendUpgrades(city){
     // if theres room in the city
-    if(((city.initiates/20) > city.leader) && city.apprentices > 0 ){ 
+    if((((city.initiates/20)-1) > city.leader) && city.apprentices > 0 ){ 
       city.upgrades -= 1
       city.apprentices -= 1
       city.leader += 1   
@@ -207,11 +230,11 @@ export default class GangBot {
       if(content === '!ping'){
         chatRoom.sendMessage('pong');
       }
-      if(content === '!listCities'){
+      if(content === '!list cities'){
         var response = ''
         this.gangData.cities.forEach(city => {
           response += (city.name)
-          response += (', ')
+          response += (', \n')
         });
         chatRoom.sendMessage(response);
       }
@@ -274,7 +297,8 @@ export default class GangBot {
         chatRoom.sendMessage(`Sorry, this feature is not impleminted yet.`);
       }
     
-      if(content === '!newWeek'){
+      //if(content === '!newWeek'){
+      if(content === 'What happens in the next in game week?'){
         this.newWeek()
         let response = ("Here is the updated data\n").concat(this.smallReport())
         chatRoom.sendMessage(response);
@@ -284,7 +308,8 @@ export default class GangBot {
         chatRoom.sendMessage(this.smallReport());
       }
 
-      if(content === '!full report'){
+      //if(content === '!full report'){
+      if(content === 'How is my gang doing now?'){
         chatRoom.sendMessage(this.mediumReport());
       }
 
@@ -295,12 +320,24 @@ export default class GangBot {
         // TODO
         chatRoom.sendMessage(this.gangData);
       }
-      // if(content === 'Hello Weavebot'){
+      if(content === 'Thank you!'){
         
-      //   //var searchName = content.slice(5, content.length)
-      //   //where 
-      //   // TODO
-      //   chatRoom.sendMessage("Hello master. How can I serve you today?");
-      // }
+        //var searchName = content.slice(5, content.length)
+        //where 
+        // TODO
+        chatRoom.sendMessage("of course master. Please don't let Mr unpainted minis talk to me though 😷");
+      }
+      if(content === '!help'){
+      //if(content === 'OK Weavebot, how can I talk to you?'){
+        chatRoom.sendMessage(
+`My commands are;
+  !report, for basic report
+  !full report, for in depth report
+  !data, for pure json
+  !list cities, to return a list of all possible locations
+  !addCity <your city name>, to create new location
+  !newWeek, to calculate how the perils of the mortal realms effect your gang
+  !withdraw <interger number>, to withdraw your money from their magic bank account`);
+      }
     }
  }
