@@ -137,6 +137,7 @@ export default class GangBot {
         this.gangData.budget += income 
       }else if((income+city.localBalance)>=50){
         this.gangData.budget += (income + city.localBalance - 50)
+        city.localBalance = 0
         city.comms = 1
       }else{
         city.localBalance += (income)
