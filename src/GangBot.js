@@ -206,7 +206,7 @@ export default class GangBot {
     } 
 
     // if another city needs a leader
-    if ((city.upgrades > 0) && this.isEmptyCity()){
+    if ((city.upgrades > 0) && this.isEmptyCity() && city.apprentices > 0 ){
       // add leader to other city
       city.upgrades -= 1
       city.apprentices -= 1
@@ -320,7 +320,7 @@ export default class GangBot {
         // TODO
         chatRoom.sendMessage(this.gangData);
       }
-      if(content === 'Thank you!'){
+      if(content === 'asdfasdfasdfasdfasdf!'){
         
         //var searchName = content.slice(5, content.length)
         //where 
