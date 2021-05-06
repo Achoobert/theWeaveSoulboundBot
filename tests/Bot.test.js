@@ -273,6 +273,11 @@ describe("GangBot", () => {
       inTransit:false,
       budget:0
     }
+    // 
+    bot.ChatRoom = {}
+    bot.ChatRoom.sendMessage = function(){
+      return
+    }
     var result = bot.spendUpgrades(protoCity);
 
     // should be in range
