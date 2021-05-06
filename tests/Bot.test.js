@@ -437,6 +437,21 @@ describe("GangBot", () => {
     testRange(6)
   });
   
+  test('!roll message Bot should do something', () => {
+    const messageContent = '!roll';
+    const expectedResponse = '1,2,3,4,5';
+                            //4,1,5,6,1';
+                            //4,1,5,6,6';
+    
+    const message = new Message(chatRoom, messageContent);
+
+    bot.handleMessage(message);
+
+    // Only one message should be sent
+    expect(chatRoom.sendMessage).toBeCalledTimes(1);
+    // The message sent should be ''
+    expect(chatRoom.sendMessage).toBeDefined();
+  });
   /*
   test('!cat cities -v - should return all the data', () => {
     // 

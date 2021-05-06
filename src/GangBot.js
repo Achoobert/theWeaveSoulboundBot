@@ -103,18 +103,21 @@ export default class GangBot {
      var outcome ='done'
      this.gangData.cities.forEach(city => {
        // 
-       if(city.initiates<6){
-         city = this.safeRoll(city)
-       } else {
-         city = this.roll(city)
-       }
-       // 
-       city = this.spendUpgrades(city)
-       //
-       city = this.calculateIncome(city)
+       if(city.inTransit){
+        city.inTransit = false
+      }else{
+        if(city.initiates<6){
+          city = this.safeRoll(city)
+        } else {
+          city = this.roll(city)
+        }
+        // 
+        city = this.spendUpgrades(city)
+        //
+        city = this.calculateIncome(city)
+      }
+        this.saveData(this.gangData, this.path)
       });
-
-      this.saveData(this.gangData, this.path)
       return outcome;
    }
    // Safe upgrade roll
@@ -298,7 +301,7 @@ export default class GangBot {
         chatRoom.sendMessage(`Sorry, this feature is not impleminted yet.`);
       }
     
-      if(content === '!newWeek'){
+      if(content === '!newEndeavorWeek'){
       //if(content === 'OK gangbot, I\'ve done some tweaking to your logic. What happens in the next in game week?'){
         this.newWeek()
         let response = ("Here is the updated data\n").concat(this.smallReport())
@@ -314,6 +317,30 @@ export default class GangBot {
         chatRoom.sendMessage(this.mediumReport());
       }
 
+      if(content === '!roll'){
+      //if(content === 'Hey Weavebot, wanna roll for Mord Sizzlelust chipping in on the recruitment drive? I\'ll withdraw 220 baht from the account to cover her fliers and posters and stuff'){
+        console.log( 'hi')
+        // get number of dice
+        //var skill = parseInt(content.slice(5, content.length))
+        var skill = 9
+        console.log(skill)
+        // output
+        var output = 'withdrawing 220\n'
+        // get three rolls
+        for (let index = 0; index < 3; index++) {
+          var line = ''
+          for (let index = 0; index < skill; index++) {
+            //this.getRandomInt(6)
+            line += (" ", this.getRandomInt(6))
+            if (index+1 != skill){
+              line += ', '
+            }
+          }
+          line += '\n'
+          output += line
+        }
+        chatRoom.sendMessage(output);
+      }
       if(content === '!cat'){
         
         //var searchName = content.slice(5, content.length)
@@ -336,8 +363,9 @@ export default class GangBot {
   !full report, for in depth report
   !data, for pure json
   !list cities, to return a list of all possible locations
+  !roll <number of dice>
   !addCity <your city name>, to create new location
-  !newWeek, to calculate how the perils of the mortal realms effect your gang
+  !newEndeavorWeek, to calculate how the perils of the mortal realms effect your gang
   !withdraw <interger number>, to withdraw your money from their magic bank account`);
       }
     }

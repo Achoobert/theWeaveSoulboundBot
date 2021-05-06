@@ -1,11 +1,11 @@
 {
     "name": "Crimson Daemons",
-    "budget": 1000,
+    "budget": 815,
     "cities": [
         {
             "name": "Anvilguard",
-            "initiates": 10,
-            "apprentices": 2,
+            "initiates": 11,
+            "apprentices": 4,
             "leader": 2,
             "upgrades": 0,
             "localBalance": 0,
@@ -13,8 +13,8 @@
         },
         {
             "name": "Hammerhall",
-            "initiates": 8,
-            "apprentices": 8,
+            "initiates": 9,
+            "apprentices": 10,
             "leader": 1,
             "upgrades": 0,
             "localBalance": 0,
@@ -22,8 +22,8 @@
         },
         {
             "name": "The Living City",
-            "initiates": 7,
-            "apprentices": 7,
+            "initiates": 5,
+            "apprentices": 8,
             "leader": 1,
             "upgrades": 0,
             "localBalance": 0,
@@ -31,8 +31,8 @@
         },
         {
             "name": "Tempest's Eye",
-            "initiates": 10,
-            "apprentices": 6,
+            "initiates": 6,
+            "apprentices": 7,
             "leader": 1,
             "upgrades": 0,
             "localBalance": 0,
@@ -46,7 +46,7 @@
             "upgrades": 0,
             "localBalance": 0,
             "comms": 1,
-            "inTransit": true
+            "inTransit": false
         },
         {
             "name": "Hallowheart",
@@ -56,7 +56,7 @@
             "upgrades": 0,
             "localBalance": 0,
             "comms": 1,
-            "inTransit": true
+            "inTransit": false
         },
         {
             "name": "The Phoenicium",
@@ -66,7 +66,7 @@
             "upgrades": 0,
             "localBalance": 0,
             "comms": 1,
-            "inTransit": true
+            "inTransit": false
         },
         {
             "name": "Brightspear",
@@ -76,7 +76,17 @@
             "upgrades": 0,
             "localBalance": 0,
             "comms": 1,
-            "inTransit": true
+            "inTransit": false
+        },
+        {
+            "name": "Vandalheim",
+            "initiates": 16,
+            "apprentices": 0,
+            "leader": 1,
+            "upgrades": 0,
+            "localBalance": 30,
+            "comms": 0,
+            "inTransit": false
         }
     ]
 }
