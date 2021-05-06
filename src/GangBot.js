@@ -197,7 +197,7 @@ export default class GangBot {
    // calculates who upgrades
    spendUpgrades(city){
     // if theres room in the city
-    if((((city.initiates/20)-1) > city.leader) && city.apprentices > 0 ){ 
+    if(((((city.initiates+city.apprentices)/20)-1) > city.leader) && city.apprentices > 0 ){ 
       city.upgrades -= 1
       city.apprentices -= 1
       city.leader += 1   
@@ -298,8 +298,8 @@ export default class GangBot {
         chatRoom.sendMessage(`Sorry, this feature is not impleminted yet.`);
       }
     
-      //if(content === '!newWeek'){
-      if(content === 'What happens in the next in game week?'){
+      if(content === '!newWeek'){
+      //if(content === 'OK gangbot, I\'ve done some tweaking to your logic. What happens in the next in game week?'){
         this.newWeek()
         let response = ("Here is the updated data\n").concat(this.smallReport())
         chatRoom.sendMessage(response);
@@ -309,8 +309,8 @@ export default class GangBot {
         chatRoom.sendMessage(this.smallReport());
       }
 
-      //if(content === '!full report'){
-      if(content === 'How is my gang doing now?'){
+      if(content === '!full report'){
+      //if(content === 'How is my gang doing now?'){
         chatRoom.sendMessage(this.mediumReport());
       }
 
