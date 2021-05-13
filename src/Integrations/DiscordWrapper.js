@@ -38,7 +38,8 @@ export default class DiscordWrapper {
     }
 
     const chatRoom = new ChatRoom(sendMessage, joinVoiceChannel);
-    const message = new Message(chatRoom, discordMessage.content);
+    const message = new Message(chatRoom, discordMessage.content, discordMessage.author.id);
+    //console.log(discordMessage)
 
     return message;
   }

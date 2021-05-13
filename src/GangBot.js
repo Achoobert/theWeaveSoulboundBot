@@ -228,9 +228,13 @@ export default class GangBot {
     return city
    }
  
-   handleMessage(message) {
-      const { chatRoom, content } = message;
-      this.chatRoom = message.chatRoom;
+  handleMessage(message) {
+    const { chatRoom, content } = message;
+    this.chatRoom = message.chatRoom;
+     //console.log(message)
+     if (message.author === '255648941641564170') {
+    //chatRoom.sendMessage('author is me')
+      
       if(content === '!ping'){
         chatRoom.sendMessage('pong');
       }
@@ -348,12 +352,48 @@ export default class GangBot {
         // TODO
         chatRoom.sendMessage(this.gangData);
       }
-      if(content === 'asdfasdfasdfasdfasdf!'){
+      if(content === 'Roll a \'understand the Great Plan\' test for me!'){
         
-        //var searchName = content.slice(5, content.length)
-        //where 
-        // TODO
-        chatRoom.sendMessage("of course master. Please don't let Mr unpainted minis talk to me though 😷");
+        //let roll = new Roll(`1d6`).roll();
+        var DicePool = 8 // skill
+        var focusPool = 0  // any focus points
+        var testCount = 3 // make this 3 for extended tests
+        var targetNumber = 4
+        var successes = 0;
+        var reportPool = '';
+
+        for (let index = 0; index < testCount; index++) {
+          var failPool = []
+          let dice = DicePool
+          let focus = focusPool
+          let testPool = []
+          while (dice > 0) {
+              let roll = this.getRandomInt(6);
+              testPool.push(roll)
+              if (roll>=targetNumber) {
+                successes++
+              }else if (roll+1==targetNumber && focus>0) {
+                successes++
+                focus--
+              } else {
+                failPool.push(roll)
+              }
+              dice--
+          } 
+          reportPool = reportPool.concat((testPool))
+          reportPool += '\n'
+          //console.log(failPool)
+          failPool.forEach(die => {
+              if(focus>1 && die+2==targetNumber){
+                successes++
+              }
+          });
+        }
+
+        console.log(reportPool)
+
+        let results_html = `you got ${successes} successes. \n the roll looked like \n${reportPool}`
+        chatRoom.sendMessage(results_html);
       }
       if(content === '!help'){
       //if(content === 'OK Weavebot, how can I talk to you?'){
@@ -369,4 +409,5 @@ export default class GangBot {
   !withdraw <interger number>, to withdraw your money from their magic bank account`);
       }
     }
+  }
  }
