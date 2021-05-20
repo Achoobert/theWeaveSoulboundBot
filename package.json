@@ -6,6 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "jest",
+    "coverage": "jest --collectCoverage",
+    "devWatch": "jest --watch",
     "start": "node --experimental-modules src/index.js"
   },
   "author": "Isaac",
