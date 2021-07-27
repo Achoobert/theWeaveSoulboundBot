@@ -240,9 +240,12 @@ export default class GangBot {
       }
       if(content === '!list cities'){
         var response = ''
-        this.gangData.cities.forEach(city => {
+        this.gangData.cities.forEach(function(city, idx, array){
           response += (city.name)
-          response += (', \n')
+          // skip linebreak on last city
+          if (idx !== array.length - 1){ 
+            response += (', \n')
+          }
         });
         chatRoom.sendMessage(response);
       }

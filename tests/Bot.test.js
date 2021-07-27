@@ -22,6 +22,7 @@ var gangDatapath = `./testGang.json`
 describe("GangBot", () => {
   let bot;
   let chatRoom;
+  let adminUser;
 
   // Runs before each test. Used for cleaning up mocks and setting up variables that are often used
   beforeEach(() => {
@@ -59,13 +60,14 @@ describe("GangBot", () => {
 
     bot = new GangBot(gangDatapath);
     chatRoom = new ChatRoom(); // This will create our mock implementation as an instance
+    adminUser = "255648941641564170"; // This will create our mock implementation as an instance
   })
   
   test('!ping message should respond with "pong"', () => {
     const messageContent = '!ping';
     const expectedResponse = 'pong';
 
-    const message = new Message(chatRoom, messageContent);
+    const message = new Message(chatRoom, messageContent, adminUser);
     
     bot.handleMessage(message);
 
@@ -130,7 +132,7 @@ describe("GangBot", () => {
       ]
    });
 
-    const message = new Message(chatRoom, messageContent);
+    const message = new Message(chatRoom, messageContent, adminUser);
     
     bot.handleMessage(message);
 
@@ -142,7 +144,7 @@ describe("GangBot", () => {
 
   test('Bot should NOT send a response if message is not a valid command', () => {
    const messageContent = 'Squad down for some CSGO tonight?';
-   const message = new Message(chatRoom, messageContent);
+   const message = new Message(chatRoom, messageContent, adminUser);
 
    bot.handleMessage(message);
 
@@ -154,7 +156,7 @@ describe("GangBot", () => {
     const messageContent = '!addCity Chiang Mai';
     const expectedResponse = 'Added Chiang Mai';
     
-    const message = new Message(chatRoom, messageContent);
+    const message = new Message(chatRoom, messageContent, adminUser);
 
     bot.handleMessage(message);
 
@@ -178,9 +180,9 @@ describe("GangBot", () => {
         inTransit:true
       })
     const messageContent = '!list cities';
-    const expectedResponse = 'Anvilguard, Hammerhall, Chiang Mai, ';
+    const expectedResponse = 'Anvilguard, \nHammerhall, \nChiang Mai';
     
-    const message = new Message(chatRoom, messageContent);
+    const message = new Message(chatRoom, messageContent, adminUser);
 
     bot.handleMessage(message);
 
@@ -252,7 +254,7 @@ describe("GangBot", () => {
     expect(result.upgrades).toBeGreaterThanOrEqual(1);
     expect(result.upgrades).toBeLessThanOrEqual(3);
   });
-   test('Bot should upgrade', () => {
+  test('Bot should upgrade', () => {
     const protoCity = {
       name:'Bangkok',
       initiates:23,
@@ -265,7 +267,38 @@ describe("GangBot", () => {
     }
     const expectCity = {
       name:'Bangkok',
-      initiates:22,
+      initiates:21,
+      apprentices:3,
+      leader:1,
+      comms:0,
+      upgrades:0,
+      inTransit:false,
+      budget:0
+    }
+    // 
+    bot.ChatRoom = {}
+    bot.ChatRoom.sendMessage = function(){
+      return
+    }
+    var result = bot.spendUpgrades(protoCity);
+
+    // should be in range
+    expect(bot.spendUpgrades(protoCity)).toEqual(expectCity);
+  });   
+  test('Bot should upgrade differently if many initiates', () => {
+    const protoCity = {
+      name:'Bangkok',
+      initiates:43,
+      apprentices:1,
+      leader:1,
+      comms:0,
+      upgrades:2,
+      inTransit:false,
+      budget:0
+    }
+    const expectCity = {
+      name:'Bangkok',
+      initiates:42,
       apprentices:1,
       leader:2,
       comms:0,
@@ -290,10 +323,10 @@ describe("GangBot", () => {
   });
 
   test('!newweek message Bot should do math and return awk', () => {
-    const messageContent = '!newWeek';
+    const messageContent = '!newEndeavorWeek';
     const expectedResponse = 'Here is the updated data';
     
-    const message = new Message(chatRoom, messageContent);
+    const message = new Message(chatRoom, messageContent, adminUser);
 
     bot.handleMessage(message);
 
@@ -309,7 +342,7 @@ describe("GangBot", () => {
     const messageContent = '!cat';
     const expectedResponse = bot.gangData;
     
-    const message = new Message(chatRoom, messageContent);
+    const message = new Message(chatRoom, messageContent, adminUser);
 
     bot.handleMessage(message);
 
@@ -361,7 +394,7 @@ describe("GangBot", () => {
     const messageContent = '!report';
     // const expectedResponse = bot.gangData;
     
-    const message = new Message(chatRoom, messageContent);
+    const message = new Message(chatRoom, messageContent, adminUser);
 
     bot.handleMessage(message);
 
@@ -375,7 +408,7 @@ describe("GangBot", () => {
     const messageContent = '!help';
     // const expectedResponse = bot.gangData;
     
-    const message = new Message(chatRoom, messageContent);
+    const message = new Message(chatRoom, messageContent, adminUser);
 
     bot.handleMessage(message);
 
@@ -443,7 +476,7 @@ describe("GangBot", () => {
                             //4,1,5,6,1';
                             //4,1,5,6,6';
     
-    const message = new Message(chatRoom, messageContent);
+    const message = new Message(chatRoom, messageContent,adminUser);
 
     bot.handleMessage(message);
 
@@ -451,6 +484,14 @@ describe("GangBot", () => {
     expect(chatRoom.sendMessage).toBeCalledTimes(1);
     // The message sent should be ''
     expect(chatRoom.sendMessage).toBeDefined();
+  });  
+  test('!Bot should ignore messages from unknown author', () => {
+    const messageContent = '!ping';    
+    const message = new Message(chatRoom, messageContent,'123sdf');
+
+    bot.handleMessage(message);
+    // TODO ??? is this test actually doing the right thing?
+    expect(chatRoom.sendMessage).toBeCalledTimes(0);
   });
   /*
   test('!cat cities -v - should return all the data', () => {
