@@ -1,92 +1,92 @@
 {
-    "name": "Crimson Daemons",
-    "budget": 815,
-    "cities": [
-        {
-            "name": "Anvilguard",
-            "initiates": 11,
-            "apprentices": 4,
-            "leader": 2,
-            "upgrades": 0,
-            "localBalance": 0,
-            "comms": 1
-        },
-        {
-            "name": "Hammerhall",
-            "initiates": 9,
-            "apprentices": 10,
-            "leader": 1,
-            "upgrades": 0,
-            "localBalance": 0,
-            "comms": 1
-        },
-        {
-            "name": "The Living City",
-            "initiates": 5,
-            "apprentices": 8,
-            "leader": 1,
-            "upgrades": 0,
-            "localBalance": 0,
-            "comms": 1
-        },
-        {
-            "name": "Tempest's Eye",
-            "initiates": 6,
-            "apprentices": 7,
-            "leader": 1,
-            "upgrades": 0,
-            "localBalance": 0,
-            "comms": 1
-        },
-        {
-            "name": "Greywater Fastness",
-            "initiates": 8,
-            "apprentices": 3,
-            "leader": 1,
-            "upgrades": 0,
-            "localBalance": 0,
-            "comms": 1,
-            "inTransit": false
-        },
-        {
-            "name": "Hallowheart",
-            "initiates": 6,
-            "apprentices": 4,
-            "leader": 1,
-            "upgrades": 0,
-            "localBalance": 0,
-            "comms": 1,
-            "inTransit": false
-        },
-        {
-            "name": "The Phoenicium",
-            "initiates": 3,
-            "apprentices": 5,
-            "leader": 1,
-            "upgrades": 0,
-            "localBalance": 0,
-            "comms": 1,
-            "inTransit": false
-        },
-        {
-            "name": "Brightspear",
-            "initiates": 7,
-            "apprentices": 6,
-            "leader": 1,
-            "upgrades": 0,
-            "localBalance": 0,
-            "comms": 1,
-            "inTransit": false
-        },
-        {
-            "name": "Vandalheim",
-            "initiates": 16,
-            "apprentices": 0,
-            "leader": 1,
-            "upgrades": 0,
-            "localBalance": 30,
-            "comms": 0,
-            "inTransit": false
-        }
-    ]
+  "name": "Crimson Daemons",
+  "budget": 1695,
+  "cities": [
+    {
+      "name": "Anvilguard",
+      "initiates": 12,
+      "apprentices": 6,
+      "leader": 2,
+      "upgrades": 0,
+      "localBalance": 0,
+      "comms": 1
+    },
+    {
+      "name": "Hammerhall",
+      "initiates": 11,
+      "apprentices": 11,
+      "leader": 1,
+      "upgrades": 0,
+      "localBalance": 0,
+      "comms": 1
+    },
+    {
+      "name": "The Living City",
+      "initiates": 9,
+      "apprentices": 8,
+      "leader": 1,
+      "upgrades": 0,
+      "localBalance": 0,
+      "comms": 1
+    },
+    {
+      "name": "Tempest's Eye",
+      "initiates": 7,
+      "apprentices": 9,
+      "leader": 1,
+      "upgrades": 0,
+      "localBalance": 0,
+      "comms": 1
+    },
+    {
+      "name": "Greywater Fastness",
+      "initiates": 6,
+      "apprentices": 5,
+      "leader": 1,
+      "upgrades": 0,
+      "localBalance": 0,
+      "comms": 1,
+      "inTransit": false
+    },
+    {
+      "name": "Hallowheart",
+      "initiates": 6,
+      "apprentices": 6,
+      "leader": 1,
+      "upgrades": 0,
+      "localBalance": 0,
+      "comms": 1,
+      "inTransit": false
+    },
+    {
+      "name": "The Phoenicium",
+      "initiates": 8,
+      "apprentices": 5,
+      "leader": 1,
+      "upgrades": 0,
+      "localBalance": 0,
+      "comms": 1,
+      "inTransit": false
+    },
+    {
+      "name": "Brightspear",
+      "initiates": 4,
+      "apprentices": 8,
+      "leader": 1,
+      "upgrades": 0,
+      "localBalance": 0,
+      "comms": 1,
+      "inTransit": false
+    },
+    {
+      "name": "Vandalheim",
+      "initiates": 13,
+      "apprentices": 2,
+      "leader": 1,
+      "upgrades": 0,
+      "localBalance": 0,
+      "comms": 1,
+      "inTransit": false
+    }
+  ]
 }
